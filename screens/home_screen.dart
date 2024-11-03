@@ -11,7 +11,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/welcome_image.png'), // Add an image in your assets
             SizedBox(height: 20),
             ElevatedButton(
               child: Text('View Recipes'),
@@ -22,6 +21,7 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 20),
             ElevatedButton(
               child: Text('View Ingredients'),
               onPressed: () {

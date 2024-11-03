@@ -16,12 +16,13 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     fetchRecipes();
   }
 
-  fetchRecipes() async {
+  Future<void> fetchRecipes() async {
     final fetchedRecipes = await ApiService.fetchRecipes();
     setState(() {
       recipes = fetchedRecipes;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(recipes[index].title),
-            subtitle: Text(recipes[index].description),
+            subtitle: Text(recipes[index].ingredients),
             leading: Image.network(recipes[index].image),
             trailing: IconButton(
               icon: Icon(Icons.favorite_border),
