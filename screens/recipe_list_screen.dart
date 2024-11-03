@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../models/recipe.dart';
 import '../services/api_service.dart';
-
-List<String> likedIngredientTitles = [];
+import '../controllers/favorites_controller.dart';
 
 class RecipeListScreen extends StatefulWidget {
   @override
@@ -10,8 +10,10 @@ class RecipeListScreen extends StatefulWidget {
 }
 
 class _RecipeListScreenState extends State<RecipeListScreen> {
+  final FavoritesController favoritesController =
+      Get.find<FavoritesController>(); // Use Get.find
   List<Recipe> recipes = [];
-  
+
   @override
   void initState() {
     super.initState();
@@ -25,16 +27,6 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     });
   }
 
-  void toggleFavorite(String ingredientId) {
-    setState(() {
-      if (likedIngredientTitles.contains(ingredientId)) {
-        likedIngredientTitles.remove(ingredientId);
-      } else {
-        likedIngredientTitles.add(ingredientId);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,20 +35,23 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         itemCount: recipes.length,
         itemBuilder: (context, index) {
           final recipe = recipes[index];
-          final isLiked = likedIngredientTitles.contains(recipe.title);
 
           return ListTile(
             title: Text(recipe.title),
             subtitle: Text(recipe.ingredients),
             leading: Image.network(recipe.image),
-            trailing: IconButton(
-              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                toggleFavorite(recipe.title);
-              },
-            ),
+            trailing: Obx(() => IconButton(
+                  icon: Icon(
+                    favoritesController.isLiked(recipe.title)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                  ),
+                  onPressed: () {
+                    favoritesController.toggleFavorite(recipe.title);
+                  },
+                )),
             onTap: () {
-              // TBD
+              // TBD: Navigate to Recipe Detail
             },
           );
         },

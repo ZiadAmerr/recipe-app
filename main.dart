@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'controllers/favorites_controller.dart';
 import 'screens/home_screen.dart';
 
 void main() {
-  runApp(RecipeBookApp());
+  // Ensure only one instance of FavoritesController is created
+  Get.put(FavoritesController());
+  runApp(MyApp());
 }
 
-class RecipeBookApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Recipe Book',
-      theme: ThemeData(primarySwatch: Colors.blue),
+    return GetMaterialApp(
       home: HomeScreen(),
     );
   }
 }
-
