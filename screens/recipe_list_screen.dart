@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/recipe.dart';
 import '../services/api_service.dart';
 
+List<String> likedIngredientTitles = [];
+
 class RecipeListScreen extends StatefulWidget {
   @override
   _RecipeListScreenState createState() => _RecipeListScreenState();
@@ -23,6 +25,15 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     });
   }
 
+  void toggleFavorite(String ingredientId) {
+    setState(() {
+      if (likedIngredientTitles.contains(ingredientId)) {
+        likedIngredientTitles.remove(ingredientId);
+      } else {
+        likedIngredientTitles.add(ingredientId);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +42,21 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       body: ListView.builder(
         itemCount: recipes.length,
         itemBuilder: (context, index) {
+          final recipe = recipes[index];
+          final isLiked = likedIngredientTitles.contains(recipe.title);
+
           return ListTile(
-            title: Text(recipes[index].title),
-            subtitle: Text(recipes[index].ingredients),
-            leading: Image.network(recipes[index].image),
+            title: Text(recipe.title),
+            subtitle: Text(recipe.ingredients),
+            leading: Image.network(recipe.image),
             trailing: IconButton(
-              icon: Icon(Icons.favorite_border),
+              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
               onPressed: () {
-                // Logic to add to favorites
+                toggleFavorite(recipe.title);
               },
             ),
             onTap: () {
-              // Navigate to Recipe Detail
+              // TBD
             },
           );
         },
@@ -50,4 +64,3 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     );
   }
 }
-
